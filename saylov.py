@@ -1,3 +1,5 @@
+#Note that before using this code, you must have created a database in mysql
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -18,7 +20,7 @@ class baza_pyqt5(QMainWindow):
         self.tb.setColumnCount(6)
         self.tb.setGeometry(0,0,930,300)
         self.con=mysql.connector.connect(user='root',password='root',
-                                          host='localhost',database='saylov')
+                                          host='localhost',database='your_database_name')
         self.baza_show()
         
         self.btn=QPushButton("Refresh",self)
@@ -33,7 +35,7 @@ class baza_pyqt5(QMainWindow):
         self.btn.clicked.connect(self.baza_show)
         
         
-    # #     #malumotni o'zgaritish
+    
         
         self.lb=QLabel("      ADD INFO",self)
         self.lb.setGeometry(130,310,250,50)
@@ -182,7 +184,7 @@ class baza_pyqt5(QMainWindow):
             QMessageBox.warning(self, "Xatolik", "Iltimos, barcha maydonlarni to'ldiring.")
             return
 
-        sql = """INSERT INTO info(shahar,uchastka_raqami,saylovchi_soni,manzil,tel_raqam) VALUES(%s,%s,%s,%s,%s)"""
+        sql = """INSERT INTO "Your_table_name"(shahar,uchastka_raqami,saylovchi_soni,manzil,tel_raqam) VALUES(%s,%s,%s,%s,%s)"""
         tpl = (shahar, uchastka,saylovchi,manzil,tel)
 
         try:
@@ -211,7 +213,7 @@ class baza_pyqt5(QMainWindow):
             head.setSectionResizeMode(x,QHeaderView.ResizeToContents)
         
         self.kur=self.con.cursor()
-        self.kur.execute("SELECT * from info")
+        self.kur.execute("SELECT * from "Your_table_name")
         res=self.kur.fetchall()
         n=len(res)
         self.tb.setRowCount(n)
@@ -234,7 +236,7 @@ class baza_pyqt5(QMainWindow):
         eski=self.txt1.text()
         yangi=self.txt2.text()
         self.kur=self.con.cursor()
-        self.kur.execute(f"UPDATE info SET {tanlash2} = '{yangi}' where {tanlash}='{eski}'")
+        self.kur.execute(f"UPDATE "Your_table_name" SET {tanlash2} = '{yangi}' where {tanlash}='{eski}'")
         self.con.commit()
         self.txt1.setText("")
         self.txt2.setText("")
